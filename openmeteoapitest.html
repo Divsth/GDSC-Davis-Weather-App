@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Davis, CA — 14-Day Forecast</title>
+</head>
+<body>
+<pre id="weather">Loading...</pre>
+<script>
+async function getWeather() {
+  const url = "https://api.open-meteo.com/v1/forecast"
+    + "?latitude=38.5449&longitude=-121.7405"
+    + "&daily=temperature_2m_max,temperature_2m_min,precipitation_sum,weathercode"
+    + "&temperature_unit=fahrenheit"
+    + "&precipitation_unit=inch"
+    + "&timezone=America%2FLos_Angeles"
+    + "&forecast_days=14";
+
+  const weatherDesc = {
+    0: "Clear sky", 1: "Mainly clear", 2: "Partly cloudy", 3: "Overcast",
+    45: "Fog", 48: "Icy fog",
+    51: "Light drizzle", 53: "Drizzle", 55: "Heavy drizzle",
+    61: "Light rain", 63: "Rain", 65: "Heavy rain",
+    71: "Light snow", 73: "Snow", 75: "Heavy snow",
+    77: "Snow grains",
+    80: "Light showers", 81: "Showers", 82: "Heavy showers",
+    85: "Snow showers", 86: "Heavy snow showers",
+    95: "Thunderstorm", 96: "Thunderstorm w/ hail", 99: "Thunderstorm w/ heavy hail"
+  };
+
+  try {
+    const response = await fetch(url);
+    const data = await response.json();
+    const d = data.daily;
+
+    let out = "Davis, CA — 14-Day Forecast\n";
+    out += "===========================\n\n";
+
+    for (let i = 0; i < d.time.length; i++) {
+      const date = new Date(d.time[i] + "T00:00:00");
+      const day = date.toLocaleDateString("en-US", { weekday: "long", month: "short", day: "numeric" });
+      const hi = d.temperature_2m_max[i].toFixed(0);
+      const lo = d.temperature_2m_min[i].toFixed(0);
+      const precip = d.precipitation_sum[i].toFixed(2);
+      const desc = weatherDesc[d.weathercode[i]] ?? "Unknown";
+
+      out += `${day}\n`;
+      out += `  ${desc}\n`;
+      out += `  High: ${hi}°F   Low: ${lo}°F\n`;
+      out += `  Precipitation: ${precip} in\n\n`;
+    }
+
+    document.getElementById("weather").innerText = out;
+  } catch (err) {
+    document.getElementById("weather").innerText = "Failed to load weather data.\n" + err;
+  }
+}
+
+getWeather();
+</script>
+</body>
+</html>
