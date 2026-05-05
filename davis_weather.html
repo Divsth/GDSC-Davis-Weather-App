@@ -357,7 +357,7 @@ function buildAlerts(d) {
     alerts.push({ level: 'danger', icon: '⛈️', title: 'Thunderstorm Warning', msg: 'Thunderstorms expected. Avoid open areas and stay indoors when possible.' });
 
   if (d.precip >= 70)
-    alerts.push({ level: 'danger', icon: '🌧️', title: 'Heavy Rain Warning', msg: `${d.precip}% chance of rain with ${d.precipSum}" expected. Allow extra travel time and watch for standing water.` });
+    alerts.push({ level: 'danger', icon: '🌧️', title: 'Rain Warning', msg: `${d.precip}% chance of rain with ${d.precipSum}" expected. Allow extra travel time and watch for standing water.` });
   else if (d.precip >= 40)
     alerts.push({ level: 'warning', icon: '🌦️', title: 'Rain Likely', msg: `${d.precip}% chance of rain. Consider bringing an umbrella.` });
 
